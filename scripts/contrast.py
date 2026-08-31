@@ -17,13 +17,13 @@ Usage:
 import argparse
 
 import numpy as np
-from fontTools.pens.basePen import BasePen
 from fontTools.ttLib import TTFont
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 from matplotlib.figure import Figure
 from matplotlib.patches import PathPatch
-from matplotlib.path import Path
 from scipy.ndimage import distance_transform_edt, maximum_filter
+
+from outline import MplPen
 
 # A spread of Kannada consonants: straight stems, bowls, loops and the
 # head-stroke, so the sample is not biased toward one construction.
@@ -33,36 +33,10 @@ GRID = 512  # raster size in pixels for the em box below
 EM_LO, EM_HI = -250, 1050  # font units covered by the raster, fixed across glyphs
 
 
-class MplPen(BasePen):
-    """Collect an outline as a matplotlib Path. BasePen turns quadratics into
-    cubics for us, so only the cubic case needs handling."""
-
-    def __init__(self, glyphset):
-        super().__init__(glyphset)
-        self.verts = []
-        self.codes = []
-
-    def _moveTo(self, pt):
-        self.verts.append(pt)
-        self.codes.append(Path.MOVETO)
-
-    def _lineTo(self, pt):
-        self.verts.append(pt)
-        self.codes.append(Path.LINETO)
-
-    def _curveToOne(self, a, b, c):
-        self.verts.extend([a, b, c])
-        self.codes.extend([Path.CURVE4] * 3)
-
-    def _closePath(self):
-        self.verts.append((0, 0))
-        self.codes.append(Path.CLOSEPOLY)
-
-
 def rasterise(glyphset, name):
     pen = MplPen(glyphset)
     glyphset[name].draw(pen)
-    if not pen.verts:
+    if pen.path() is None:
         return None
 
     fig = Figure(figsize=(GRID / 100, GRID / 100), dpi=100)
@@ -71,7 +45,7 @@ def rasterise(glyphset, name):
     ax.axis("off")
     ax.set_xlim(EM_LO, EM_HI)
     ax.set_ylim(EM_LO, EM_HI)
-    ax.add_patch(PathPatch(Path(pen.verts, pen.codes), fc="black", ec="none"))
+    ax.add_patch(PathPatch(pen.path(), fc="black", ec="none"))
     fig.canvas.draw()
     return np.asarray(fig.canvas.buffer_rgba())[..., 0] < 128
 

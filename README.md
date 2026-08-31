@@ -76,6 +76,24 @@ fontmake -o variable -g sources/Hoysala.glyphs --output-path "fonts/Hoysala[wght
 That skips the Latin merge and the Google Fonts fixes, so it is for looking at
 shapes, not for release. Output lands in `fonts/`, which is not committed.
 
+## Proofing
+
+`scripts/proof.py` shapes text with HarfBuzz — so conjuncts, matras and
+reordering are real — and renders it. Pass one font for a specimen, or several
+to stack them line-for-line:
+
+```
+python scripts/proof.py "fonts/Hoysala[wght].ttf" -o proof/specimen.png
+python scripts/proof.py "fonts/Hoysala[wght].ttf" NotoSerifKannada.ttf \
+    --labels Hoysala "Noto Serif Kannada" -o proof/compare.png
+```
+
+Against the parent, the Kannada is currently identical and both measure 2.04
+contrast, which is the intended starting state: the rebrand changed no outlines.
+That comparison is the "before" to judge the contrast work against.
+
+Output goes to `proof/`, which is not committed.
+
 ## Open items
 
 - Vendor ID is a placeholder (`HYSL`) and needs registering with Microsoft.
