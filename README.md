@@ -29,30 +29,54 @@ kerning, features and masters are inherited untouched.
 The parent is a low-contrast text serif. Hoysala keeps its skeleton and
 proportions and changes the modulation:
 
-- raise stroke contrast, thinning horizontals against retained vertical weight
+- raise stroke contrast by thinning the hairlines, keeping the thick strokes
 - sharpen terminals and serifs
 - tighten spacing for display sizes
-- narrow the shipped weight range to what a display face needs
+- ship 400–900 only, the range that can actually hold contrast (done)
 
 `scripts/contrast.py` measures the thick/thin ratio so this is trackable rather
 than a matter of opinion. The inherited baseline, over a sample of fifteen
 Kannada consonants:
 
-| wght | thin | thick | contrast |
-| ---- | ---- | ----- | -------- |
-| 100  | 22   | 25    | 1.18     |
-| 400  | 46   | 93    | 2.04     |
-| 700  | 61   | 138   | 2.27     |
-| 900  | 66   | 162   | 2.46     |
+| wght | thick (keep) | hairline now | hairline target | contrast now | target |
+| ---- | ------------ | ------------ | --------------- | ------------ | ------ |
+| 400  | 93           | 46           | 23              | 2.04         | 4.0    |
+| 700  | 138          | 61           | 26              | 2.27         | 5.3    |
+| 900  | 162          | 66           | 28              | 2.46         | 5.8    |
 
-The light end is effectively monolinear, so it needs the most work. A display
-serif of this kind wants something closer to 4 at Regular, reached mainly by
-thinning the thins rather than fattening the thicks.
+Contrast is raised by holding the hairline roughly constant while the thick
+stroke grows with weight, which is how high-contrast serifs work. The thick
+strokes are already right, so the work is almost entirely subtractive: remove
+material from the thins and leave the skeleton, proportions and weight alone.
+
+It also follows that low contrast at the light end is inherent rather than a
+defect. At wght 100 the thick stroke is only 25 units, so there is nothing to
+remove, which is why the axis starts at 400.
+
+Spacing is currently 14% of advance in sidebearings (52 and 54 units against a
+769 advance). Display setting wants roughly 9–10%, with 8% as the floor —
+Kannada below-base forms and the e/ai matras overhang the ink box and collide
+before Latin would.
+
+For serifs, reduce the bracketing so joins read crisp rather than filleted, and
+taper terminals closer to a point. The highest-value single element is the
+talekattu, the head stroke most consonants carry: drawing it as a finely
+tapered stroke rather than an even-weight arc signals the whole idea, because
+it repeats across the alphabet and the eye lands on it first.
+
+The subjoined consonants are the main risk. They sit at roughly 60% scale, so a
+23-unit hairline lands near 14 units in a vattu. They need drawing proportionally
+heavier rather than scaled.
 
 ## Sources
 
-Four drawn masters on a single `wght` axis — Light, Regular, SemiBold and Bold —
-inherited from the parent. The nine named weights are interpolated instances.
+Three drawn masters on a single `wght` axis — Regular, Bold and Black at 400,
+700 and 900 — with Medium, SemiBold and ExtraBold interpolated between them.
+
+The parent's fourth master at wght 100 was dropped by
+`scripts/trim_weight_range.py`, along with the instances below 400. Its masters
+were also named a step light — the one called "SemiBold" sat at wght 700 — so
+they were renamed to match the instances they define.
 
 ## Building
 
