@@ -33,13 +33,13 @@ GRID = 512  # raster size in pixels for the em box below
 EM_LO, EM_HI = -250, 1050  # font units covered by the raster, fixed across glyphs
 
 
-def rasterise(glyphset, name):
+def rasterise(glyphset, name, grid=GRID):
     pen = MplPen(glyphset)
     glyphset[name].draw(pen)
     if pen.path() is None:
         return None
 
-    fig = Figure(figsize=(GRID / 100, GRID / 100), dpi=100)
+    fig = Figure(figsize=(grid / 100, grid / 100), dpi=100)
     FigureCanvasAgg(fig)
     ax = fig.add_axes([0, 0, 1, 1])
     ax.axis("off")

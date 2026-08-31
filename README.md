@@ -118,6 +118,26 @@ That comparison is the "before" to judge the contrast work against.
 
 Output goes to `proof/`, which is not committed.
 
+## Planning the work
+
+`scripts/worklist.py` orders the drawing and doubles as a progress report:
+
+```
+python scripts/worklist.py "fonts/Hoysala[wght].ttf"
+```
+
+It measures every glyph that carries real outlines, reports how far each
+hairline still is from target, and sorts by how many other glyphs are built
+from it. Of 419 glyphs, 341 need drawing and 62 are composites that inherit the
+fix for free. The single highest-leverage glyph is the virama `uni0CCD`, which
+31 glyphs depend on.
+
+Check the contrast column before acting on a row. Glyphs sitting at 1.00 — the
+danda, the hyphen, the North Indic fraction signs — are uniform strokes rather
+than modulated letters, and taking them down to the letter hairline would just
+make them vanish. The ordering optimises effort, not design sequence: the style
+still gets settled on a handful of consonants first.
+
 ## Open items
 
 - Vendor ID is a placeholder (`HYSL`) and needs registering with Microsoft.
