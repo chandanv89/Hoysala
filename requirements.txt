@@ -1,6 +1,8 @@
 gftools==0.9991
 fontmake==3.12.1
-fontbakery[googlefonts]
+# Needs a floor: unpinned, pip backtracks to 0.8.10, which cannot import the
+# modern glyphsets that gftools requires, and the profile dies on import.
+fontbakery[googlefonts]>=1.1.0
 
 # scripts/contrast.py
 numpy
