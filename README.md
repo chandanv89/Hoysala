@@ -6,6 +6,12 @@ It is named after the Hoysala dynasty, whose temples at Belur and Halebidu are
 known for intricate, deeply undercut soapstone relief — a fitting reference for
 a face built on sharp modulation and strong light-and-shadow.
 
+![Hoysala specimen and comparison](documentation/specimen.png)
+
+Regenerate the sheet with `scripts/datasheet.py`. Every figure on it is
+measured from the binaries at render time, so it cannot claim something the
+font does not do.
+
 ## Status
 
 Early. A first automated contrast pass has been applied, taking the face from
@@ -13,6 +19,40 @@ Early. A first automated contrast pass has been applied, taking the face from
 rebrand. Every glyph still wants a hand pass: the offset does not sharpen
 serifs or terminals, and 15 glyphs were left untouched because it broke them.
 Do not treat builds from this repository as a finished typeface.
+
+## Hoysala or Noto Serif Kannada?
+
+Hoysala is not a better Noto Serif Kannada. It is a narrower one, built to do a
+job the parent deliberately does not: set large.
+
+| | Hoysala | Noto Serif Kannada |
+| --- | --- | --- |
+| Built for | headlines, titles, display | body text, UI, long reading |
+| Contrast at 400 / 900 | **3.34 / 4.43** | 2.04 / 2.46 |
+| Hairline at 400 | **27 units** | 46 units |
+| Thick stroke at 400 | 91 units | 93 units |
+| Weights | 6, wght 400–900 | 9, wght 100–900 |
+| Scripts | Kannada | Kannada + Latin |
+| Maturity | early, 15 glyphs pending | production, fully QA'd |
+| Hinting | none yet | complete |
+| Licence | OFL 1.1 | OFL 1.1 |
+
+**Choose Hoysala** when the type is big enough for modulation to register —
+titles, posters, mastheads, book covers, editorial openers. At those sizes the
+parent looks undifferentiated, because an even stroke is exactly what a text
+face should have. Hoysala's thick strokes carry the same weight as the parent's,
+so it holds a page without looking spindly, while the thinned verticals give it
+the light-and-shadow a display face needs.
+
+**Choose Noto Serif Kannada** for body text, interfaces, captions, anything set
+below roughly 24px, and anything shipping now. A 27-unit hairline is about a
+third of a pixel at 16px: it will disappear or fringe. You also need Noto if you
+want Latin in the same family, weights lighter than Regular, or hinting.
+
+The honest summary: today Hoysala does one thing the parent cannot, and the
+parent does several things Hoysala cannot. That gap narrows as the drawing
+progresses, but the display-versus-text split is the point of the design and
+will not close.
 
 ## Provenance
 
