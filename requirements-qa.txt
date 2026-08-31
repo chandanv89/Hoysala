@@ -1,0 +1,4 @@
+# Installed on its own, never alongside requirements.txt: the googlefonts extra
+# pins protobuf<4, which conflicts with gftools and has no wheel newer than
+# Python 3.11. The QA job therefore runs on 3.11 against the built binaries.
+fontbakery[googlefonts]>=1.1.0

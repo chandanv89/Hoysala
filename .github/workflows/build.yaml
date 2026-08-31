@@ -23,10 +23,37 @@ jobs:
       - name: Build
         run: gftools builder sources/config.yaml
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hoysala-fonts
+          path: fonts/**/*.ttf
+
+  qa:
+    needs: build
+    runs-on: ubuntu-latest
+    # Informational for now: the design work is unfinished and the derivative
+    # inherits the parent's issues. Tighten to a hard gate before release.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      # 3.11, not 3.12: fontbakery's googlefonts extra pins protobuf<4, which
+      # has no wheel beyond 3.11. This job is also kept separate from the build
+      # because that same pin conflicts with gftools.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: hoysala-fonts
+          path: fonts
+
+      - name: Install Fontbakery
+        run: pip install -r requirements-qa.txt
+
       - name: Fontbakery
-        # Informational for now: the derivative inherits the parent's issues and
-        # the design work has not started. Tighten to a hard gate before release.
-        continue-on-error: true
         run: |
           fontbakery check-googlefonts \
             --html fontbakery-report.html \
@@ -36,7 +63,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: hoysala-fonts
-          path: |
-            fonts/**/*.ttf
-            fontbakery-report.html
+          name: fontbakery-report
+          path: fontbakery-report.html

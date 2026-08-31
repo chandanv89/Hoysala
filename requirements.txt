@@ -1,10 +1,11 @@
 gftools==0.9991
 fontmake==3.12.1
-# Needs a floor: unpinned, pip backtracks to 0.8.10, which cannot import the
-# modern glyphsets that gftools requires, and the profile dies on import.
-fontbakery[googlefonts]>=1.1.0
 
-# scripts/contrast.py
+# scripts/contrast.py, worklist.py, proof.py, datasheet.py
 numpy
 scipy
 matplotlib
+
+# Fontbakery is deliberately absent: its googlefonts extra pins protobuf<4
+# while gftools needs protobuf>=6.33, so the two cannot share an environment.
+# See requirements-qa.txt, installed separately by the QA job.
