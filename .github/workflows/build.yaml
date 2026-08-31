@@ -1,0 +1,42 @@
+name: Build and QA
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install toolchain
+        run: pip install -r requirements.txt
+
+      - name: Build
+        run: gftools builder sources/config.yaml
+
+      - name: Fontbakery
+        # Informational for now: the derivative inherits the parent's issues and
+        # the design work has not started. Tighten to a hard gate before release.
+        continue-on-error: true
+        run: |
+          fontbakery check-googlefonts \
+            --html fontbakery-report.html \
+            --succinct \
+            fonts/variable/*.ttf
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hoysala-fonts
+          path: |
+            fonts/**/*.ttf
+            fontbakery-report.html

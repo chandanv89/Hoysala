@@ -1,0 +1,8 @@
+gftools==0.9991
+fontmake==3.12.1
+fontbakery[googlefonts]
+
+# scripts/contrast.py
+numpy
+scipy
+matplotlib

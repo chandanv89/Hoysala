@@ -1,0 +1,14 @@
+familyName: Hoysala
+sources:
+  - Hoysala.glyphs
+category:
+  - DISPLAY
+axisOrder:
+  - wght
+buildVariable: true
+# Placeholder Latin, merged at build time from Noto Serif. It is a low-contrast
+# text face and will not sit correctly against high-contrast Kannada; it must be
+# redrawn and baked into the source before release.
+includeSubsets:
+  - from: Noto Serif
+    name: GF_Latin_Core

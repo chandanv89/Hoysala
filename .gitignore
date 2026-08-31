@@ -1,0 +1,12 @@
+fonts/
+out/
+proof/
+venv/
+.venv/
+__pycache__/
+*.pyc
+.ninja_log
+build.ninja
+master_ufo/
+instance_ufo/
+variable_ttf/
