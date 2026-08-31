@@ -8,9 +8,11 @@ a face built on sharp modulation and strong light-and-shadow.
 
 ## Status
 
-Early. The sources are currently an unmodified rebrand of the parent design; the
-contrast work has not started. Do not treat builds from this repository as a
-finished typeface.
+Early. A first automated contrast pass has been applied, taking the face from
+2.04 to 3.34 at Regular, so it is now visibly its own design rather than a
+rebrand. Every glyph still wants a hand pass: the offset does not sharpen
+serifs or terminals, and 15 glyphs were left untouched because it broke them.
+Do not treat builds from this repository as a finished typeface.
 
 ## Provenance
 
@@ -29,20 +31,31 @@ kerning, features and masters are inherited untouched.
 The parent is a low-contrast text serif. Hoysala keeps its skeleton and
 proportions and changes the modulation:
 
-- raise stroke contrast by thinning the hairlines, keeping the thick strokes
+- raise stroke contrast by thinning the vertical strokes (first pass done)
 - sharpen terminals and serifs
 - tighten spacing for display sizes
 - ship 400–900 only, the range that can actually hold contrast (done)
+
+Kannada is stressed the opposite way to Latin, and this is the single most
+important thing to get right. Measured on the parent, its vertical strokes run
+53–66 units and its horizontals 86–91: **the horizontals are the thick
+strokes**, following the broad-nib origin it shares with Devanagari's headline.
+Contrast therefore comes from thinning the verticals. Applying Latin logic and
+thinning the horizontals lowers contrast instead — measurably, from 2.04 to
+1.70, which is how this was found.
 
 `scripts/contrast.py` measures the thick/thin ratio so this is trackable rather
 than a matter of opinion. The inherited baseline, over a sample of fifteen
 Kannada consonants:
 
-| wght | thick (keep) | hairline now | hairline target | contrast now | target |
-| ---- | ------------ | ------------ | --------------- | ------------ | ------ |
-| 400  | 93           | 46           | 23              | 2.04         | 4.0    |
-| 700  | 138          | 61           | 26              | 2.27         | 5.3    |
-| 900  | 162          | 66           | 28              | 2.46         | 5.8    |
+| wght | thick (parent → now) | hairline (parent → now) | contrast (parent → now) | target |
+| ---- | -------------------- | ----------------------- | ----------------------- | ------ |
+| 400  | 93 → 91              | 46 → 27                 | 2.04 → 3.34             | 4.0    |
+| 700  | 138 → 132            | 61 → 30                 | 2.27 → 4.33             | 5.3    |
+| 900  | 162 → 157            | 66 → 36                 | 2.46 → 4.43             | 5.8    |
+
+The thick strokes came through essentially intact, which is the point: the
+weight and colour of the parent are preserved and only the hairlines moved.
 
 Contrast is raised by holding the hairline roughly constant while the thick
 stroke grows with weight, which is how high-contrast serifs work. The thick
@@ -137,6 +150,25 @@ danda, the hyphen, the North Indic fraction signs — are uniform strokes rather
 than modulated letters, and taking them down to the letter hairline would just
 make them vanish. The ordering optimises effort, not design sequence: the style
 still gets settled on a handful of consonants first.
+
+## Raising the contrast
+
+`scripts/raise_contrast.py` applies the first pass, moving each outline point
+horizontally in proportion to the horizontal component of its normal — the same
+operation as the Offset Curve filter in Glyphs. It is reproducible from a clean
+source:
+
+```
+git checkout sources/Hoysala.glyphs
+python scripts/raise_contrast.py
+```
+
+It is a starting point, not a finished face. It does not sharpen serifs or
+terminals, and it leaves 15 glyphs alone, listed as `HAND_FIX` in the script.
+Those are the ones where an inward offset opens corners in some masters and not
+others, changing their point counts and making them uninterpolatable. Most are
+subjoined `.below` forms, which over-thin because they already sit at roughly
+60% scale — the risk called out before any of this was run.
 
 ## Open items
 
